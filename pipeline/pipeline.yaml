@@ -18,7 +18,7 @@ spec:
     default: src
   workspaces:
   - name: shared-data
-  - name: quay-credentials
+  - name: docker-credentials
   tasks:
   - name: clone-repo
     taskRef:
@@ -36,6 +36,8 @@ spec:
     workspaces:
     - name: source
       workspace: shared-data
+    - name: dockerconfig
+      workspace: docker-credentials
     params:
     - name: CONTEXT
       value: $(params.pathToContext)

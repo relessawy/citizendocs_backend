@@ -14,9 +14,9 @@ spec:
         resources:
           requests:
             storage: 1Gi
-  - name: quay-credentials
+  - name: docker-credentials
     secret:
-      secretName: quay-credentials
+      secretName: docker-credentials
   params:
   - name: repo-url
     value: https://github.com/relessawy/citizendocs_backend
