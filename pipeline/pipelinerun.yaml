@@ -22,3 +22,6 @@ spec:
     value: https://github.com/relessawy/citizendocs_backend
   - name: imageUrl
     value: quay.io/relessaw/citizendocs-backend
+  - name: DOCKERFILE
+    value: ./Dockerfile
+  

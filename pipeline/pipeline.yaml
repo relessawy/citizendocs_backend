@@ -13,9 +13,8 @@ spec:
   - name: imageUrl
     description: Image name including repository
     type: string
-  - name: pathToContext
-    description: The path to the build context, used by Kaniko - within the workspace
-    default: src
+  - name: dockerfile
+    default: ./Dockerfile
   workspaces:
   - name: shared-data
   - name: docker-credentials
@@ -39,7 +38,7 @@ spec:
     - name: dockerconfig
       workspace: docker-credentials
     params:
-    - name: CONTEXT
-      value: $(params.pathToContext)
+    - name: DOCKERFILE
+      value: $(params.dockerfile)
     - name: IMAGE
       value: $(params.imageUrl)
