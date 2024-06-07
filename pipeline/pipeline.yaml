@@ -3,16 +3,24 @@ kind: Pipeline
 metadata:
   name: clone-build-push
 spec:
-  description: | 
-    This pipeline clones a git repo, builds a Docker image with Kaniko and
-    pushes it to a registry
+  description: |
+    This pipeline clones a git repo, builds an image with Kaniko and
+    pushes it to quay    
   params:
   - name: repo-url
+    description: Git repository url
     type: string
+  - name: imageUrl
+    description: Image name including repository
+    type: string
+  - name: pathToContext
+    description: The path to the build context, used by Kaniko - within the workspace
+    default: src
   workspaces:
   - name: shared-data
+  - name: quay-credentials
   tasks:
-  - name: fetch-source
+  - name: clone-repo
     taskRef:
       name: git-clone
     workspaces:
@@ -21,3 +29,15 @@ spec:
     params:
     - name: url
       value: $(params.repo-url)
+  - name: build-push
+    runAfter: ["clone-repo"]
+    taskRef:
+      name: kaniko
+    workspaces:
+    - name: source
+      workspace: shared-data
+    params:
+    - name: CONTEXT
+      value: $(params.pathToContext)
+    - name: IMAGE
+      value: $(params.imageUrl)
