@@ -1,0 +1,21 @@
+replicaCount: 1
+
+backend:
+  image:
+    repository: quay.io/relessaw/citizendocs-backend
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8080
+
+postgresql:
+  auth:
+    username: postgres
+    password: mysecretpassword
+    database: citizendocs
+  primary:
+    service:
+      port: 5432
+
+resources: {}

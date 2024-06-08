@@ -13,11 +13,18 @@ spec:
   - name: imageUrl
     description: Image name including repository
     type: string
-  - name: dockerfile
-    default: ./Dockerfile
+  - name: helm_release_version
+    type: string
+    description: The helm tag
+    default: latest
+  - name: target_namespace
+    type: string
+    description: The namespace to deploy in
+    default: citizindocs-pipeline
   workspaces:
   - name: shared-data
   - name: docker-credentials
+  
   tasks:
   - name: clone-repo
     taskRef:
@@ -28,7 +35,8 @@ spec:
     params:
     - name: url
       value: $(params.repo-url)
-  - name: build-push
+
+  - name: build-push-to-quay
     runAfter: ["clone-repo"]
     taskRef:
       name: kaniko
@@ -39,6 +47,25 @@ spec:
       workspace: docker-credentials
     params:
     - name: DOCKERFILE
-      value: $(params.dockerfile)
+      value: $(workspaces.source.path)/Dockerfile
     - name: IMAGE
       value: $(params.imageUrl)
+      
+  - name: helm-deploy
+    taskRef:
+      name: helm-upgrade-from-source
+    runAfter:
+        - build-push-to-quay
+    workspaces:
+      - name: source
+        workspace: sshared-data
+    params:
+        - name: charts_dir
+          value: "citizendocs-chart"
+        - name: release_version
+          value: $(params.helm_release_version)
+        - name: release_name
+          value: "citizendocs"
+        - name: release_namespace
+          value: $(params.target_namespace)
+    
