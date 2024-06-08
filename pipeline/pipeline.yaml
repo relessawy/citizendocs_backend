@@ -20,7 +20,7 @@ spec:
   - name: target_namespace
     type: string
     description: The namespace to deploy in
-    default: citizindocs-pipeline
+    default: citizendocs-pipeline
   workspaces:
   - name: shared-data
   - name: docker-credentials
@@ -58,7 +58,7 @@ spec:
         - build-push-to-quay
     workspaces:
       - name: source
-        workspace: sshared-data
+        workspace: shared-data
     params:
         - name: charts_dir
           value: "citizendocs-chart"

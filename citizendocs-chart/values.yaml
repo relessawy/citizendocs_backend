@@ -17,5 +17,25 @@ postgresql:
   primary:
     service:
       port: 5432
+    podSecurityContext:
+        enabled: false
+        fsGroup: ""
+    containerSecurityContext:
+        enabled: false
+        runAsUser: "auto"
+
+    readReplicas:
+        podSecurityContext:
+            enabled: false
+            fsGroup: ""
+        containerSecurityContext:
+            enabled: false
+            runAsUser: "auto"
+
+    volumePermissions:
+        enabled: false
+        securityContext:
+            runAsUser: "auto"
+  
 
 resources: {}
